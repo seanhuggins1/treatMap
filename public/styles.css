@@ -35,20 +35,12 @@ h2 {
 }
 h1 {
       color: white;
-      font-family: 'Roboto Slab', sans-serif;
       font-size: 3vw;
       font-weight: 600;
       margin: 1vw;
       padding: 0;
+      color: #352c26;
 }
-
-h2 {
-      font-family: 'Roboto Slab', sans-serif;
-      font-size: 3vw;
-      color: #231F20;
-      margin: 2px;
-}
-
 .buttonBox {
       display: flex;
       flex-direction: row;
@@ -59,13 +51,10 @@ h2 {
 }
 .button {
       background-color: white;
-  filter-buttons
       transition: .2s filter ease-in-out;
       height: fit-content;
-      font-family: 'Roboto Slab', sans-serif;
-      font-weight: 600;
       transition: .2s all ease-in-out;
-main
+      color: #352c26;
 }
 .button:hover {
       filter: drop-shadow(0px 0px 5px black);
@@ -133,7 +122,7 @@ main
       height: 100%;
       opacity: 1;
 
-      background-color: #c35ac7;
+      background-color: #FFE3CF;
       transition: .4s opacity ease-in-out;
 }
 #questionContainer > .question {
