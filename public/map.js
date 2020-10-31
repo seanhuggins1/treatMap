@@ -1,6 +1,8 @@
+import { treatData } from "./main.js";
 
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
+
 
 
 var treatFeatures = [
@@ -9,6 +11,10 @@ var treatFeatures = [
             'geometry': {
                   'type': 'Point',
                   'coordinates': [0, 0]
+            },
+            'properties': {
+                  'treatTypeTags': [],
+                  'treatDietTags': [],
             }
       },
       {
@@ -16,6 +22,10 @@ var treatFeatures = [
             'geometry': {
                   'type': 'Point',
                   'coordinates': [0, 0]
+            },
+            'properties': {
+                  'treatTypeTags': [],
+                  'treatDietTags': [],
             }
       },
       {
@@ -23,9 +33,23 @@ var treatFeatures = [
             'geometry': {
                   'type': 'Point',
                   'coordinates': [0, 0]
+            },
+            'properties': {
+                  'treatTypeTags': [],
+                  'treatDietTags': [],
             }
       }
-]
+];
+function updateTreatFeatures(features){
+      let dataGeoJson = {
+            'type': 'FeatureCollection',
+            'features': features
+      } 
+      map.getSource('treats-source').setData(dataGeoJson);
+}
+
+
+
 
 
 export function addTreatToMap(treatData) {
@@ -33,16 +57,20 @@ export function addTreatToMap(treatData) {
             'type': 'Feature',
             'geometry': {
                   'type': 'Point',
-                  'coordinates': center
-                  
+                  'coordinates': treatData.center,
+
             },
             'properties': {
                   'treatTypeTags': treatData.treatTypeTags,
                   'treatDietTags': treatData.treatDietTags,
             }
       }
+      console.log(treatData.treatTypeTags);
       treatFeatures.push(newCandy);
+      updateTreatFeatures(treatFeatures);
 }
+
+
 
 
 async function getAddressLngLat(address) {
@@ -66,7 +94,7 @@ function getLocation() {
             maximumAge: 0
       };
       if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(initMap, error, options);
+            navigator.geolocation.getCurrentPosition(initMap, () => {}, options);
       } else {
             alert("Geolocation is not supported by this browser.");
       }
@@ -77,58 +105,84 @@ function error(err) {
 }
 
 var map;
-export function initMap(center = [0, 0]) {
 
 
-      //initialize the map
-      map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: 'mapbox://styles/shuggins/ckgwnjfgn0yl119s4bob2uyx9', // style URL
-            center: [0, 0], // starting position [lng, lat]
-            zoom: 2 // starting zoom
-      });
+export function filterTreatFeatures(typeTags, dietTags){
 
-
-      map.on("load", function () {
-
-
-            //fly to the address that the user searched
-
-            async function flyToAddress(address) {
-                  map.flyTo({
-                        center: center,
-                        zoom: 17,
-                  })
-            }
-            flyToAddress();
-
-
-            map.loadImage(
-                  'pumpkin.png',
-                  function (error, image) {
-                        if (error) throw error;
-                        map.addImage('cat', image);
-                        map.addSource('point', {
-                              'type': 'geojson',
-                              'data': {
-                                    'type': 'FeatureCollection',
-                                    'features': candy
-                              }
-                        });
-                        map.addLayer({
-                              'id': 'points',
-                              'type': 'symbol',
-                              'source': 'point',
-                              'layout': {
-                                    'icon-image': 'cat',
-                                    'icon-size': 0.5
-                              }
-                        });
+      let filteredTreatFeatures = [];
+      
+      for (let treatFeature of treatFeatures){
+            
+            let visible = true;
+            for (let typeTag of typeTags){
+                  if (!treatFeature.properties.treatTypeTags.includes(typeTag)){
+                        visible = false;
                   }
-            );
+            }
+            for (let dietTag of dietTags){
+                  if (!treatFeature.properties.treatDietTags.includes(dietTag)){
+                        visible = false;
+                  }
+            }
+            if (visible) { 
+                  filteredTreatFeatures.push(treatFeature);
+            }
+      }
 
-      });
+      //console.log(JSON.stringify(filteredTreatFeatures, null, 2));
+      //update the map with the filtered list of features
+      updateTreatFeatures(filteredTreatFeatures);
 }
+
+document.addEventListener('keypress', function (event) {
+      if (event.key == '0'){
+            filterTreatFeatures(['Caramilk'], ['Wheat']);
+      }
+});
+
+//initialize the map
+map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/shuggins/ckgwnjfgn0yl119s4bob2uyx9', // style URL
+      center: [0, 0], // starting position [lng, lat]
+      zoom: 2 // starting zoom
+});
+
+//fly to a centerpoint on the map
+export async function flyToCenter(center) {
+      map.flyTo({
+            center: center,
+            zoom: 17,
+      })
+}
+
+
+
+map.on("load", function () {
+      map.loadImage(
+            'pumpkin.png',
+            function (error, image) {
+                  if (error) throw error;
+                  map.addImage('cat', image);
+                  map.addSource('treats-source', {
+                        'type': 'geojson',
+                        'data': {
+                              'type': 'FeatureCollection',
+                              'features': treatFeatures
+                        }
+                  });
+                  map.addLayer({
+                        'id': 'treats-layer',
+                        'type': 'symbol',
+                        'source': 'treats-source',
+                        'layout': {
+                              'icon-image': 'cat',
+                              'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.1, 15, 0.25]
+                        }
+                  });
+            }
+      );
+});
 
 
 //getLocation();

@@ -1,4 +1,4 @@
-import {initMap, addTreatToMap} from './map.js'
+import {flyToCenter, addTreatToMap} from './map.js'
 
 
 
@@ -43,14 +43,14 @@ async function addTreat(treatData){
       addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
       
       //FETCH to our DB
-      let url = new URL('/addTreat');
-      let response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-             'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify(treatData) // We send data in JSON format
-      });
+      // let url = new URL('/addTreat');
+      // let response = await fetch(url, {
+      //       method: 'PUT',
+      //       headers: {
+      //        'Content-type': 'application/json; charset=UTF-8'
+      //       },
+      //       body: JSON.stringify(treatData) // We send data in JSON format
+      // });
       
 }
 
@@ -58,17 +58,23 @@ function showMap(center = [0,0]) {
       activeQuestion = null;
 
       //hide the question container
-      questionContainer.style.display = 'none';
-
+      questionContainer.style.opacity = '0.0';
+      
       //show the map container
       mapContainer.style.display = 'flex';
-
-      //add the treat data to the map
       addTreat(treatData);
+      setTimeout(() => {
+            questionContainer.style.display = 'none';
 
 
-      initMap(center);
+      
+            //add the treat data to the map
+
+            flyToCenter(center);
+      }, 400);
+
 }
+
 mapContainer.style.display = 'none';
 refreshQuestions();
 
