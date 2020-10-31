@@ -29,7 +29,7 @@
             <div id="map"></div>
             <div id="tagDrawer">
                   <div class="buttonBox">
-                        <div class="button big-button" onclick="showFilterTags()">filter treats</div>
+                        <div id="filterButton" class="button big-button" onclick="toggleFilterTags()">filter treats</div>
                   </div>      
                   <div id="filterTags">
                         <h2>treat preferences:</h2>
@@ -71,6 +71,7 @@
                   </div>
             </div>
       </div>
+      <script type="module" src="tags.js"></script>
       <script type="module" src="geocoder.js"></script>
       <script type="module" src="map.js"></script>
       <script type="module" src="main.js"></script>

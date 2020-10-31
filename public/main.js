@@ -1,5 +1,5 @@
 import { flyToCenter, addTreatToMap, filterTreatFeatures } from './map.js'
-
+import { treatDietTags, treatTypeTags } from './tags.js';
 
 
 var activeQuestion = 0;
@@ -9,20 +9,21 @@ export let treatData = {};
 
 window.nextQuestion = nextQuestion;
 
-function showFilterTags() {
-      filterTags.style.display = 'flex';
-      setTimeout(() => {
-            filterTags.style.opacity = '1.0';
-      }, 1);
+function toggleFilterTags() {
+      filterTags.classList.toggle('shown');
+      if (filterButton.innerHTML == 'filter treats'){
+            filterButton.innerHTML = 'hide'; 
+      } else {
+            filterButton.innerHTML = 'filter treats'
+      }
       
 }
 
-window.showFilterTags = showFilterTags;
+window.toggleFilterTags = toggleFilterTags;
 
 function refreshQuestions() {
       let questions = questionContainer.getElementsByClassName("question");
       for (let q = 0; q < questions.length; q++) {
-            console.log(q);
             if (q == activeQuestion) {
                   questions[q].style.display = '';
                   questions[q].style.opacity = '1.0';
@@ -87,8 +88,6 @@ function showMap(center = [0, 0]) {
 
 questionContainer.style.display = 'flex';
 mapContainer.style.display = 'none';
-filterTags.style.display = 'none';
-filterTags.style.opacity = '0.0';
 refreshQuestions();
 
 
@@ -102,13 +101,19 @@ function handleMapTagClick(event) {
       tagElem.classList.toggle('selected');
 
       //update the map with the new filters
+      let typeTags = [];
+      for(let typeFilterTagElem of typeFilterTags.getElementsByClassName('selected')){
+            typeTags.push(typeFilterTagElem.innerHTML);
+      }
+      let dietTags = [];
+      for(let dietFilterTagElem of dietFilterTags.getElementsByClassName('selected')){
+            dietTags.push(dietFilterTagElem.innerHTML);
+      }
 
-
-      console.log(filterTags.querySelectorAll('.selected.typeTag'));
-      // filterTreatFeatures(
-      //       tagDrawer.querySelectorAll('.selected')
-      // )
-      // tagDrawer.querySelectorAll('.selected')
+      filterTreatFeatures(
+            typeTags,
+            dietTags
+            );
 }
 
 function handleSubmitTypeTags(event) {
@@ -118,7 +123,6 @@ function handleSubmitTypeTags(event) {
             let tagName = typeTagElem.innerHTML;
             treatData.treatTypeTags.push(tagName);
       }
-      console.log(treatData);
       nextQuestion();
 }
 
@@ -129,7 +133,6 @@ function handleSubmitDietTags(event) {
             let tagName = dietTagElem.innerHTML;
             treatData.treatDietTags.push(tagName);
       }
-      console.log(treatData);
       nextQuestion();
 }
 
@@ -137,21 +140,7 @@ function handleSubmitDietTags(event) {
 submitTypeTags.addEventListener('click', handleSubmitTypeTags);
 submitDietTags.addEventListener('click', handleSubmitDietTags);
 
-let tags = [
-      'Peanuts',
-      'Tree Nuts',
-      'Dairy',
-      'Eggs',
-      'Wheat',
-      'Soy',
-]
-let treatTypeTags = [
-      'Chips',
-      'Candy',
-      'Chocolate',
-      'KitKat',
-      'Caramilk',
-]
+
 for (let tag of treatTypeTags) {
       //create a tag element for the questionnaire
       let tagElem = document.createElement('div');
@@ -167,7 +156,7 @@ for (let tag of treatTypeTags) {
       tagElem.addEventListener('click', handleMapTagClick);
       typeFilterTags.append(tagElem);
 }
-for (let tag of tags) {
+for (let tag of treatDietTags) {
       //create a tag element for the questionnaire
       let tagElem = document.createElement('div');
       tagElem.classList.add('button', 'tag-button','dietTag');

@@ -98,9 +98,11 @@ h1 {
       background-color: white;
       padding: 0.7vw;
       border-radius: 0.7vw;
-      display: flex;
+      display: none;
       flex-direction: column;
-      transition: .2s opacity ease-in-out;
+}
+#filterTags.shown {
+      display: flex;
 }
 
 #questionContainer {
