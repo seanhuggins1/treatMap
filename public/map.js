@@ -47,7 +47,37 @@ function generateDummyTreatFeatures(numFeatures) {
             treatFeatures.push(feature);
       }
 }
-generateDummyTreatFeatures(100);
+//generateDummyTreatFeatures(100);
+
+
+async function generateTreatFeaturesFromDB(){
+      let response = await fetch('/Candies', {
+            method: 'GET',
+      });
+      let json = await response.json();
+
+      //parse the treat features
+      let treats = json["Treats "];
+      for (let treatData of treats){
+            let treatFeature = {
+                  'type': 'Feature',
+                  'geometry': {
+                        'type': 'Point',
+                        'coordinates': treatData.center,
+      
+                  },
+                  'properties': {
+                        'treatTypeTags': treatData.treatTypeTags,
+                        'treatDietTags': treatData.treatDietTags,
+                  }
+            }
+            treatFeatures.push(treatFeature);
+      }
+
+
+      
+}
+generateTreatFeaturesFromDB();
 
 function updateTreatFeatures(features) {
       let dataGeoJson = {
@@ -62,7 +92,7 @@ function updateTreatFeatures(features) {
 
 
 export function addTreatToMap(treatData) {
-      let newCandy = {
+      let newTreat = {
             'type': 'Feature',
             'geometry': {
                   'type': 'Point',
@@ -74,7 +104,9 @@ export function addTreatToMap(treatData) {
                   'treatDietTags': treatData.treatDietTags,
             }
       }
-      treatFeatures.push(newCandy);
+
+      treatFeatures.push(newTreat);
+
       updateTreatFeatures(treatFeatures);
 }
 
