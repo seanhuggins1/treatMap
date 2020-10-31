@@ -29,6 +29,19 @@
       <!-- MAP -->
       <div id="mapContainer">
             <div id="map"></div>
+            <div id="tagDrawer">
+                  <div class="buttonBox">
+                        <div id="filterButton" class="button big-button" onclick="toggleFilterTags()">filter treats</div>
+                  </div>      
+                  <div id="filterTags">
+                        <h2>treat preferences:</h2>
+                        <div id="typeFilterTags" class="buttonBox">
+                        </div>    
+                        <h2>dietary restrictions:</h2>
+                        <div id="dietFilterTags" class="buttonBox">
+                        </div>   
+                  </div>
+            </div>
       </div>
 
 
@@ -65,6 +78,7 @@
                   </div>
             </div>
       </div>
+      <script type="module" src="tags.js"></script>
       <script type="module" src="geocoder.js"></script>
       <script type="module" src="map.js"></script>
       <script type="module" src="main.js"></script>

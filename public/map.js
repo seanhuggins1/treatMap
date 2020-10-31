@@ -1,50 +1,59 @@
-import { treatData } from "./main.js";
-
+import { treatData} from "./main.js";
+import {treatTypeTags, treatDietTags} from './tags.js';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
 
+function generateRandomCoordinates() {
+      let lng = -180 + Math.floor(Math.random() * 360);
+      let lat = -90 + Math.floor(Math.random() * 180);
+      return [lng, lat];
+}
+
+var treatFeatures = [];
+function generateDummyTreatFeatures(numFeatures) {
+      for (let i = 0; i < numFeatures; i++) {
 
 
-var treatFeatures = [
-      {
-            'type': 'Feature',
-            'geometry': {
-                  'type': 'Point',
-                  'coordinates': [0, 0]
-            },
-            'properties': {
-                  'treatTypeTags': [],
-                  'treatDietTags': [],
+
+            //choose a random number of tags from the typeTags
+            let numTypeChoices = Math.floor(Math.random() * (treatTypeTags.length + 1));
+            let typeChoices = [];
+            while (typeChoices.length < numTypeChoices) {
+                  var typeChoice = treatTypeTags[Math.floor(Math.random() * treatTypeTags.length)];
+                  if (typeChoices.indexOf(typeChoice) === -1) typeChoices.push(typeChoice);
             }
-      },
-      {
-            'type': 'Feature',
-            'geometry': {
-                  'type': 'Point',
-                  'coordinates': [0, 0]
-            },
-            'properties': {
-                  'treatTypeTags': [],
-                  'treatDietTags': [],
+
+            //choose a random number of tags from the typeTags
+            let numDietChoices = Math.floor(Math.random() * (treatDietTags.length + 1));
+            let dietChoices = [];
+            while (dietChoices.length < numDietChoices) {
+                  let dietChoice = treatDietTags[Math.floor(Math.random() * treatDietTags.length)];
+                  if (dietChoices.indexOf(dietChoice) === -1) dietChoices.push(dietChoice);
             }
-      },
-      {
-            'type': 'Feature',
-            'geometry': {
-                  'type': 'Point',
-                  'coordinates': [0, 0]
-            },
-            'properties': {
-                  'treatTypeTags': [],
-                  'treatDietTags': [],
+
+
+
+            let feature = {
+                  'type': 'Feature',
+                  'geometry': {
+                        'type': 'Point',
+                        'coordinates': generateRandomCoordinates()
+                  },
+                  'properties': {
+                        'treatTypeTags': typeChoices,
+                        'treatDietTags': dietChoices,
+                  }
             }
+            treatFeatures.push(feature);
       }
-];
-function updateTreatFeatures(features){
+}
+generateDummyTreatFeatures(100);
+
+function updateTreatFeatures(features) {
       let dataGeoJson = {
             'type': 'FeatureCollection',
             'features': features
-      } 
+      }
       map.getSource('treats-source').setData(dataGeoJson);
 }
 
@@ -65,7 +74,6 @@ export function addTreatToMap(treatData) {
                   'treatDietTags': treatData.treatDietTags,
             }
       }
-      console.log(treatData.treatTypeTags);
       treatFeatures.push(newCandy);
       updateTreatFeatures(treatFeatures);
 }
@@ -82,8 +90,6 @@ async function getAddressLngLat(address) {
       let response = await fetch(url);
       let json = await response.json();
 
-
-      console.log(JSON.stringify(json, null, 2));
       return json.features[0].center;
 }
 
@@ -94,7 +100,7 @@ function getLocation() {
             maximumAge: 0
       };
       if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(initMap, () => {}, options);
+            navigator.geolocation.getCurrentPosition(initMap, () => { }, options);
       } else {
             alert("Geolocation is not supported by this browser.");
       }
@@ -107,35 +113,36 @@ function error(err) {
 var map;
 
 
-export function filterTreatFeatures(typeTags, dietTags){
+export function filterTreatFeatures(typeTags, dietTags) {
 
       let filteredTreatFeatures = [];
-      
-      for (let treatFeature of treatFeatures){
-            
+
+      for (let treatFeature of treatFeatures) {
+
             let visible = true;
-            for (let typeTag of typeTags){
-                  if (!treatFeature.properties.treatTypeTags.includes(typeTag)){
+            for (let typeTag of typeTags) {
+                  //we only show treat features with treats that we want to see in the type filters 
+                  if (!treatFeature.properties.treatTypeTags.includes(typeTag)) {
                         visible = false;
                   }
             }
-            for (let dietTag of dietTags){
-                  if (!treatFeature.properties.treatDietTags.includes(dietTag)){
+            for (let dietTag of dietTags) {
+                  //if the treat feature has any of the diet filter tags, we shouldn't show the treat
+                  if (treatFeature.properties.treatDietTags.includes(dietTag)) {
                         visible = false;
                   }
             }
-            if (visible) { 
+            if (visible) {
                   filteredTreatFeatures.push(treatFeature);
             }
       }
 
-      //console.log(JSON.stringify(filteredTreatFeatures, null, 2));
       //update the map with the filtered list of features
       updateTreatFeatures(filteredTreatFeatures);
 }
 
 document.addEventListener('keypress', function (event) {
-      if (event.key == '0'){
+      if (event.key == '0') {
             filterTreatFeatures(['Caramilk'], ['Wheat']);
       }
 });

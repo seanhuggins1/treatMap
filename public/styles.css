@@ -27,6 +27,12 @@ body {
       width: 100vw;
 }
 
+h2 {
+      font-size: 1.5vw;
+      font-weight: 600;
+      margin: 0.3vw;
+      padding: 0;
+}
 h1 {
       color: white;
       font-family: 'Roboto Slab', sans-serif;
@@ -47,15 +53,19 @@ h2 {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: fit-content;
 }
 .button {
       background-color: white;
+  filter-buttons
+      transition: .2s filter ease-in-out;
+      height: fit-content;
       font-family: 'Roboto Slab', sans-serif;
       font-weight: 600;
       transition: .2s all ease-in-out;
+main
 }
 .button:hover {
       filter: drop-shadow(0px 0px 5px black);
@@ -64,12 +74,12 @@ h2 {
 .big-button {
       padding: 1vw;
       margin: 1vw;
-      border-radius: 0.3vw;
+      border-radius: 0.7vw;
 }
 .submit-button {
       padding: 1vw;
       margin: 1vw;
-      border-radius: 0.3vw;
+      border-radius: 0.7vw;
       width: 50%;
       color: white;
       min-width: fit-content;
@@ -80,11 +90,38 @@ h2 {
       margin: 0.3vw;
       border-radius: 0.3vw;
 }
-.tag-button.selected {
-      background-color: #dddddd;
+.dietTag.selected {
+      background-color: #ffdfdf;
 }
-#questionContainer {
+.typeTag.selected {
+      background-color: #e4ffdf;
+}
+
+#tagDrawer {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 30%;
+      padding: 1vw;
+
       display: flex;
+      flex-direction: column;
+      
+}
+#filterTags {
+      background-color: white;
+      padding: 0.7vw;
+      border-radius: 0.7vw;
+      display: none;
+      flex-direction: column;
+}
+#filterTags.shown {
+      display: flex;
+}
+
+#questionContainer {
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
