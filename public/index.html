@@ -8,6 +8,8 @@
       <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
       <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,300,500,600,700,900">
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600&display=swap"
+            rel="stylesheet">
       <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -46,17 +48,21 @@
       <!-- QUESTIONS -->
       <div id="questionContainer">
             <div class="question">
-                  <h1>This halloween...are you</h1>
+                  <img src="/public/jack-o-lantern.svg" alt="pumpkin" width="250px">
+                  <h1>Safe Treats</h1>
+                  <h2>This halloween...are you:</h2>
                   <div class="buttonBox">
                         <div class="button big-button" onclick="nextQuestion()">handing out treats</div>
                         <div class="button big-button" onclick="openMap()">trick or treating</div>
                   </div>
             </div>
             <div class="question">
+                  <img src="/public/candy-bag.svg" alt="candybag" width="40%">
                   <h1>what's your street address?</h1>
                   <div id="geocoder"></div>
             </div>
             <div class="question">
+                  <img src="/public/cauldron.svg" alt="cauldron" width="40%">
                   <h1>do your treats contain any common allergens?</h1>
                   <div id="dietTags" class="buttonBox"></div>
                   <div class="buttonBox">
@@ -64,6 +70,7 @@
                   </div>
             </div>
             <div class="question">
+                  <img src="/public/candy-bag.svg" alt="candies" width="40%">
                   <h1>what type of treats are you giving out?</h1>
                   <div id="typeTags" class="buttonBox"></div>
                   <div class="buttonBox">
