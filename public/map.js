@@ -190,7 +190,7 @@ map.on("load", function () {
             }
       );
 });
-
+//
 // function handleTreatClick(e) {
 //       let features = map.queryRenderedFeatures(
 //             e.point,
