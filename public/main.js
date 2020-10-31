@@ -1,7 +1,5 @@
 import {initMap, addTreatToMap} from './map.js'
 
-
-
 var activeQuestion = 0;
 
 //create a form data object to store the info about the treat provider
