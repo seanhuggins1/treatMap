@@ -7,6 +7,7 @@
       <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
       <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
       <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,300,500,600,700,900">
       <link rel="stylesheet" href="styles.css">
 
@@ -33,13 +34,15 @@
       <div id="questionContainer">
             <div class="question">
                   <img src="/images/jack-o-lantern.svg" alt="pumpkin" width="250px">
-                  <h1>This halloween...are you</h1>
+                  <h1>Safe Treats</h1>
+                  <h2>This halloween...are you:</h2>
                   <div class="buttonBox">
                         <div class="button big-button" onclick="nextQuestion()">handing out candy</div>
                         <div class="button big-button" onclick="openMap()">trick or treating</div>
                   </div>
             </div>
             <div class="question">
+                  <img src="/images/candy-bag.svg" alt="candybag" width="40%">
                   <h1>What's your street address?</h1>
                   <div id="geocoder"></div>
             </div>

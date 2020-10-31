@@ -32,7 +32,16 @@ h1 {
       font-weight: 600;
       margin: 1vw;
       padding: 0;
+      font-family: 'Roboto Slab', serif;
+      color: white;
 }
+
+h2 {
+      font-size: 3vw;
+      color: #231F20;
+      margin: 2px;
+}
+
 .buttonBox {
       display: flex;
       flex-direction: row;
@@ -49,6 +58,9 @@ h1 {
 .big-button {
       padding: 1vw;
       margin: 1vw;
+      border-radius: 6px;
+      font-family: 'Roboto Slab', serif;
+      font-weight: 600;
 }
 
 #questionContainer {
