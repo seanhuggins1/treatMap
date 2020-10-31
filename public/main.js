@@ -51,14 +51,14 @@ export function nextQuestion() {
 async function addTreat(treatData) {
       addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
 
-      // let url = new URL('/addTreat');
-      // let response = await fetch(url, {
-      //       method: 'PUT',
-      //       headers: {
-      //        'Content-type': 'application/json; charset=UTF-8'
-      //       },
-      //       body: JSON.stringify(treatData) // We send data in JSON format
-      // });
+
+      let response = await fetch('/Candy', {
+            method: 'POST',
+            headers: {
+             'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(treatData), // We send data in JSON format
+      });
 }
 
 function showMap(center = [0, 0]) {
