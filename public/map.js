@@ -1,5 +1,5 @@
-import { treatData} from "./main.js";
-import {treatTypeTags, treatDietTags} from './tags.js';
+import { treatData } from "./main.js";
+import { treatTypeTags, treatDietTags } from './tags.js';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
 
@@ -190,6 +190,17 @@ map.on("load", function () {
             }
       );
 });
+
+// function handleTreatClick(e) {
+//       let features = map.queryRenderedFeatures(
+//             e.point,
+//             { layers: ['treats-layer'] }
+//       );
+//       console.log(JSON.stringify(features[0]));
+// }
+
+// map.on('click', handleTreatClick(e));
+
 
 
 //getLocation();
