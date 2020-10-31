@@ -29,68 +29,38 @@
             <div id="map"></div>
       </div>
 
+
       <!-- QUESTIONS -->
       <div id="questionContainer">
             <div class="question">
                   <h1>This halloween...are you</h1>
                   <div class="buttonBox">
-                        <div class="button big-button" onclick="nextQuestion()">handing out candy</div>
+                        <div class="button big-button" onclick="nextQuestion()">handing out treats</div>
                         <div class="button big-button" onclick="openMap()">trick or treating</div>
                   </div>
             </div>
             <div class="question">
-                  <h1>What's your street address?</h1>
+                  <h1>what's your street address?</h1>
                   <div id="geocoder"></div>
             </div>
             <div class="question">
-
+                  <h1>do your treats contain any common allergens?</h1>
+                  <div id="dietTags" class="buttonBox"></div>
+                  <div class="buttonBox">
+                        <div id="submitDietTags" class="button submit-button">OK</div>
+                  </div>
+            </div>
+            <div class="question">
+                  <h1>what type of treats are you giving out?</h1>
+                  <div id="typeTags" class="buttonBox"></div>
+                  <div class="buttonBox">
+                        <div id="submitTypeTags" class="button submit-button">OK</div>
+                  </div>
             </div>
       </div>
-      <script src="geocoder.js"></script>
-      <script src="map.js"></script>
-      <script>
-            var activeQuestion = 0;
-
-            function refreshQuestions() {
-                  let questions = questionContainer.getElementsByClassName("question");
-                  for (let q = 0; q < questions.length; q++) {
-                        console.log(q);
-                        if (q == activeQuestion) {
-                              questions[q].style.display = '';
-                              questions[q].style.opacity = '1.0';
-                        } else {
-                              questions[q].style.display = 'none';
-                              questions[q].style.opacity = '0.0';
-                        }
-                  }
-            }
-
-            function nextQuestion() {
-                  let questions = questionContainer.getElementsByClassName("question");
-                  questions[activeQuestion].style.opacity = '0.0';
-                  questions[activeQuestion].ontransitionend = function () {
-                        questions[activeQuestion].style.display = 'none';
-                        activeQuestion++;
-                        questions[activeQuestion].style.display = '';
-                        questions[activeQuestion].style.opacity = '1.0';
-                  }
-            }
-            function openMap(center = [0,0]) {
-                  activeQuestion = null;
-
-                  //hide the question container
-                  questionContainer.style.display = 'none';
-
-                  //show the map container
-                  mapContainer.style.display = 'flex';
-
-                  initMap(center);
-            }
-            mapContainer.style.display = 'none';
-            refreshQuestions();
-
-      </script>
-
+      <script type="module" src="geocoder.js"></script>
+      <script type="module" src="map.js"></script>
+      <script type="module" src="main.js"></script>
 
 
 </body>

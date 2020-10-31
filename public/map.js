@@ -1,7 +1,9 @@
+
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
 
 
-var candy = [
+var treatFeatures = [
       {
             'type': 'Feature',
             'geometry': {
@@ -26,15 +28,20 @@ var candy = [
 ]
 
 
-function addCandyToMap(center) {
+export function addTreatToMap(treatData) {
       let newCandy = {
             'type': 'Feature',
             'geometry': {
                   'type': 'Point',
                   'coordinates': center
+                  
+            },
+            'properties': {
+                  'treatTypeTags': treatData.treatTypeTags,
+                  'treatDietTags': treatData.treatDietTags,
             }
       }
-      candy.push(newCandy);
+      treatFeatures.push(newCandy);
 }
 
 
@@ -70,7 +77,7 @@ function error(err) {
 }
 
 var map;
-function initMap(center = [0, 0]) {
+export function initMap(center = [0, 0]) {
 
 
       //initialize the map
@@ -97,7 +104,7 @@ function initMap(center = [0, 0]) {
 
 
             map.loadImage(
-                  'https://uxwing.com/wp-content/themes/uxwing/download/23-animals-and-nature/halloween.png',
+                  'pumpkin.png',
                   function (error, image) {
                         if (error) throw error;
                         map.addImage('cat', image);
@@ -114,7 +121,7 @@ function initMap(center = [0, 0]) {
                               'source': 'point',
                               'layout': {
                                     'icon-image': 'cat',
-                                    'icon-size': 0.1
+                                    'icon-size': 0.5
                               }
                         });
                   }
@@ -122,11 +129,6 @@ function initMap(center = [0, 0]) {
 
       });
 }
-
-
-
-
-
 
 
 //getLocation();
