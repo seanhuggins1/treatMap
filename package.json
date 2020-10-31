@@ -1,0 +1,19 @@
+{
+  "name": "treatmap",
+  "version": "1.0.0",
+  "description": "trick or treat app for Hack or Treat 2020",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seanhuggins1/treatMap.git"
+  },
+  "author": "safetreat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seanhuggins1/treatMap/issues"
+  },
+  "homepage": "https://github.com/seanhuggins1/treatMap#readme"
+}
