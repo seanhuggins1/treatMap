@@ -7,25 +7,90 @@
       <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
       <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
       <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
-      <style>
-            body {
-                  margin: 0;
-                  padding: 0;
-            }
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,300,500,600,700,900">
+      <link rel="stylesheet" href="styles.css">
 
-            #map {
-                  position: absolute;
-                  top: 0;
-                  bottom: 0;
-                  width: 100%;
-            }
-      </style>
 </head>
 
 <body>
-      <div id="map"></div>
+      <!-- GEOCODER -->
+      <script
+            src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+      <link rel="stylesheet"
+            href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+            type="text/css" />
+      <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+      <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
+
+      <!-- MAP -->
+      <div id="mapContainer">
+            <div id="map"></div>
+      </div>
+
+      <!-- QUESTIONS -->
+      <div id="questionContainer">
+            <div class="question">
+                  <h1>This halloween...are you</h1>
+                  <div class="buttonBox">
+                        <div class="button big-button" onclick="nextQuestion()">handing out candy</div>
+                        <div class="button big-button" onclick="openMap()">trick or treating</div>
+                  </div>
+            </div>
+            <div class="question">
+                  <h1>What's your street address?</h1>
+                  <div id="geocoder"></div>
+            </div>
+            <div class="question">
+
+            </div>
+      </div>
+
+      <script>
+            var activeQuestion = 0;
+
+            function refreshQuestions() {
+                  let questions = questionContainer.getElementsByClassName("question");
+                  for (let q = 0; q < questions.length; q++) {
+                        console.log(q);
+                        if (q == activeQuestion) {
+                              questions[q].style.display = '';
+                              questions[q].style.opacity = '1.0';
+                        } else {
+                              questions[q].style.display = 'none';
+                              questions[q].style.opacity = '0.0';
+                        }
+                  }
+            }
+
+            function nextQuestion() {
+                  let questions = questionContainer.getElementsByClassName("question");
+                  questions[activeQuestion].style.opacity = '0.0';
+                  questions[activeQuestion].ontransitionend = function () {
+                        questions[activeQuestion].style.display = 'none';
+                        activeQuestion++;
+                        questions[activeQuestion].style.display = '';
+                        questions[activeQuestion].style.opacity = '1.0';
+                  }
+            }
+            function openMap() {
+                  activeQuestion = null;
+                  refreshQuestions();
+
+                  questionContainer.style.display = 'none';
+                  mapContainer.style.display = 'flex';
+
+
+                  initMap();
+            }
+            mapContainer.style.display = 'none';
+            refreshQuestions();
+
+      </script>
+      <script src="geocoder.js"></script>
       <script src="map.js"></script>
+
 
 </body>
 
