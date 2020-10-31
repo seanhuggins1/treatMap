@@ -1,7 +1,6 @@
 import { flyToCenter, addTreatToMap, filterTreatFeatures } from './map.js'
 import { treatDietTags, treatTypeTags } from './tags.js';
 
-
 var activeQuestion = 0;
 
 //create a form data object to store the info about the treat provider
@@ -52,7 +51,6 @@ export function nextQuestion() {
 async function addTreat(treatData) {
       addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
 
-      //FETCH to our DB
       // let url = new URL('/addTreat');
       // let response = await fetch(url, {
       //       method: 'PUT',
@@ -61,7 +59,6 @@ async function addTreat(treatData) {
       //       },
       //       body: JSON.stringify(treatData) // We send data in JSON format
       // });
-
 }
 
 function showMap(center = [0, 0]) {
