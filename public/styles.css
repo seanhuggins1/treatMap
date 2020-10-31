@@ -86,8 +86,6 @@ h1 {
       position: fixed;
       left: 0;
       top: 0;
-      height: 100%;
-      width: 30%;
       padding: 1vw;
 
       display: flex;
@@ -96,6 +94,7 @@ h1 {
 }
 #filterTags {
       background-color: white;
+      width: 30vw;
       padding: 0.7vw;
       border-radius: 0.7vw;
       display: none;
