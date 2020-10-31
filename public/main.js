@@ -42,6 +42,7 @@ async function addTreat(treatData){
       
       //FETCH to our DB
       let url = new URL('/addTreat');
+      console.log(`url: ${url}`);
       let response = await fetch(url, {
             method: 'PUT',
             headers: {

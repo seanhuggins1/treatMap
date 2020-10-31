@@ -2,51 +2,84 @@ module.exports = function(app, db) {
     var headers = {
         'Content-Type': 'application/json; charset=UTF-8'
     }
-    
-    app.get('/', (req, res) => {
-        res.status(200).send("It's working!");
-    });
 
     app.post('/Candy', async(req, res) => {
-        candy = req.body;
-        
-        var id = await db.addTreat(candy);   
-        console.log(id);
-        if (id == null) {
-            res.status(400).json({"Message ": "There was an error!"});
-            return;
+        try{
+            candy = req.body;
+            
+            var id = await db.addTreat(candy);   
+            console.log(id);
+            if (id == null) {
+                res.status(500).json({"Message ": "There was an error!"});
+                return;
+            }
+            res.status(201).json({"ID": id, "Candy": candy});
         }
-        res.status(201).json({"ID": id, "Candy": candy});
+        catch(error) {
+            res.status(500).json({"error": error});
+        }
     });
 
     app.get('/Candies', async(req, res) => {
-        var treats = await db.fetchAllTreats();
-        res.set(headers);
+        try{
+            var treats = await db.fetchAllTreats();
+            res.set(headers);
 
-        if (treats == null) {
-            res.status(500).json({"Message ": "There was an error!"});
-            return;
+            if (treats == null) {
+                res.status(500).json({"Message ": "There was an error!"});
+                return;
+            }
+            res.status(200).json({"Treats " : treats});
         }
-        res.status(200).json({"Treats " : treats});
+        catch(error) {
+            res.status(500).json({"error": error});
+        }
     });
 
     app.get('/Candies/:Location', async(req, res) => {
-        var Location = req.params.Location;
-        //console.log(`Location: ${Location}`);
-        var treats = await db.fetchByLocation(Location);
-        res.set(headers);
+        try{
+            var Location = req.params.Location;
+            //console.log(`Location: ${Location}`);
+            var treats = await db.fetchByLocation(Location);
+            res.set(headers);
 
-        if (treats == null) {
-            res.status(500).json({"Message ": "There was an error!"});
-            return;
+            if (treats == null) {
+                res.status(500).json({"Message ": "There was an error!"});
+                return;
+            }
+            res.status(200).json({"Treats " : treats});
         }
-        res.status(200).json({"Treats " : treats});
+        catch(error) {
+            res.status(500).json({"error": error});
+        }
+    });
+
+    app.delete('/Candies', async(req, res) => {
+        try{
+            var deletedCount = await db.deleteAllTreats();
+            res.set(headers);
+
+            if (deletedCount == null) {
+                res.status(500).json({"Message ": "There was an error!"});
+                return;
+            }
+            res.status(200).json({"message": `Deleted ${deletedCount} documents`});
+        }
+        catch(error) {
+            res.status(500).json({"error": error});
+        }
+    });
+
+    app.delete('/Candy/:Id', async(req, res) => {
+        try{
+            var Id = req.params.Id;
+            var deletedCount = await db.deleteTreatById(Id);
+            res.set(headers);
+
+            res.status(200).json({"message": `Deleted ${deletedCount} documents`});
+        }
+        catch(error) {
+            res.status(500).json({"error": error});
+        }
     });
 }
-
-
-/* required: nosql db connection, make db object public
-   endpoints:  
-   - addTreat, make call to db object
-   - return all entries from DB
-*/

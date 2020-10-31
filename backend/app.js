@@ -5,14 +5,14 @@ const process = require('process');
 var cookieParser = require('cookie-parser');
 
 var app = express();
-app.use(express.static(__dirname + '/public'))
+app.use(express.static('../public'))
    .use(cors())
    .use(cookieParser())  
    .use(express.json());
 
 var database = require('./Database/database');
 var db = new database(`mongodb+srv://dbUser:${process.env.env_pwd}@cluster0.c7ut5.mongodb.net/admin?retryWrites=true&w=majority`); 
-console.log(db);
+// console.log(db); // test
 
 require('./routes')(app, db);
 
