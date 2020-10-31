@@ -21,6 +21,8 @@ function toggleFilterTags() {
 
 window.toggleFilterTags = toggleFilterTags;
 
+
+
 function refreshQuestions() {
       let questions = questionContainer.getElementsByClassName("question");
       for (let q = 0; q < questions.length; q++) {
@@ -34,6 +36,7 @@ function refreshQuestions() {
       }
 }
 
+//goes to next question in questionnaire
 export function nextQuestion() {
       let questions = questionContainer.getElementsByClassName("question");
       questions[activeQuestion].style.opacity = '0.0';
