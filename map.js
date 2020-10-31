@@ -1,5 +1,43 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
 
+
+var candy = [
+      {
+            'type': 'Feature',
+            'geometry': {
+                  'type': 'Point',
+                  'coordinates': [0, 0]
+            }
+      },
+      {
+            'type': 'Feature',
+            'geometry': {
+                  'type': 'Point',
+                  'coordinates': [0, 0]
+            }
+      },
+      {
+            'type': 'Feature',
+            'geometry': {
+                  'type': 'Point',
+                  'coordinates': [0, 0]
+            }
+      }
+]
+
+
+function addCandyToMap(center) {
+      let newCandy = {
+            'type': 'Feature',
+            'geometry': {
+                  'type': 'Point',
+                  'coordinates': center
+            }
+      }
+      candy.push(newCandy);
+}
+
+
 async function getAddressLngLat(address) {
       //setup a URL object to the mapbox geocoding api with our address
       let url = new URL(`/geocoding/v5/mapbox.places/${address}.json`, 'https://api.mapbox.com');
@@ -32,7 +70,8 @@ function error(err) {
 }
 
 var map;
-function initMap(position) {
+function initMap(center = [0, 0]) {
+
 
       //initialize the map
       map = new mapboxgl.Map({
@@ -50,12 +89,45 @@ function initMap(position) {
 
             async function flyToAddress(address) {
                   map.flyTo({
-                        center: await getAddressLngLat(address),
+                        center: center,
+                        zoom: 17,
                   })
             }
-            flyToAddress('893 richmond street');
+            flyToAddress();
+
+
+            map.loadImage(
+                  'https://uxwing.com/wp-content/themes/uxwing/download/23-animals-and-nature/halloween.png',
+                  function (error, image) {
+                        if (error) throw error;
+                        map.addImage('cat', image);
+                        map.addSource('point', {
+                              'type': 'geojson',
+                              'data': {
+                                    'type': 'FeatureCollection',
+                                    'features': candy
+                              }
+                        });
+                        map.addLayer({
+                              'id': 'points',
+                              'type': 'symbol',
+                              'source': 'point',
+                              'layout': {
+                                    'icon-image': 'cat',
+                                    'icon-size': 0.1
+                              }
+                        });
+                  }
+            );
+
       });
 }
+
+
+
+
+
+
 
 //getLocation();
 
