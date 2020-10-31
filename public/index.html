@@ -46,7 +46,8 @@
 
             </div>
       </div>
-
+      <script src="geocoder.js"></script>
+      <script src="map.js"></script>
       <script>
             var activeQuestion = 0;
 
@@ -74,22 +75,22 @@
                         questions[activeQuestion].style.opacity = '1.0';
                   }
             }
-            function openMap() {
+            function openMap(center = [0,0]) {
                   activeQuestion = null;
-                  refreshQuestions();
 
+                  //hide the question container
                   questionContainer.style.display = 'none';
+
+                  //show the map container
                   mapContainer.style.display = 'flex';
 
-
-                  initMap();
+                  initMap(center);
             }
             mapContainer.style.display = 'none';
             refreshQuestions();
 
       </script>
-      <script src="geocoder.js"></script>
-      <script src="map.js"></script>
+
 
 
 </body>

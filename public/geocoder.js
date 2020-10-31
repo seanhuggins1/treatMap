@@ -8,6 +8,6 @@ geocoder.addTo('#geocoder');
 
 
 geocoder.on('result', function(result) {
-      console.log(result);
-      console.log('hello');
+      addCandyToMap(result.result.center);
+      openMap(result.result.center);
 });
