@@ -1,4 +1,4 @@
-import {initMap} from './map.js'
+import {initMap, addTreatToMap} from './map.js'
 
 
 
@@ -38,6 +38,22 @@ export function nextQuestion() {
             }
       }, 200);
 }
+
+async function addTreat(treatData){
+      addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
+      
+      //FETCH to our DB
+      let url = new URL('/addTreat');
+      let response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+             'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(treatData) // We send data in JSON format
+      });
+      
+}
+
 function showMap(center = [0,0]) {
       activeQuestion = null;
 
@@ -46,6 +62,10 @@ function showMap(center = [0,0]) {
 
       //show the map container
       mapContainer.style.display = 'flex';
+
+      //add the treat data to the map
+      addTreat(treatData);
+
 
       initMap(center);
 }
@@ -61,10 +81,10 @@ function handleTagClick(event){
 
 function handleSubmitTypeTags(event){
       let typeTagElems = typeTags.getElementsByClassName('selected');
-      treatData.typeTags = [];
+      treatData.treatTypeTags = [];
       for (let typeTagElem of typeTagElems){
             let tagName = typeTagElem.innerHTML;
-            treatData.typeTags.push(tagName);
+            treatData.treatTypeTags.push(tagName);
       }
       console.log(treatData);
       nextQuestion();
@@ -72,10 +92,10 @@ function handleSubmitTypeTags(event){
 
 function handleSubmitDietTags(event){
       let dietTagElems = dietTags.getElementsByClassName('selected');
-      treatData.dietTags = [];
+      treatData.treatDietTags = [];
       for (let dietTagElem of dietTagElems){
             let tagName = dietTagElem.innerHTML;
-            treatData.dietTags.push(tagName);
+            treatData.treatDietTags.push(tagName);
       }
       console.log(treatData);
       nextQuestion();
