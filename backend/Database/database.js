@@ -1,45 +1,71 @@
-class Databse {
+class Database {
     constructor(url) {
-        this.MongoClient = require('mongodb').MongoClient;
         this.url = url;
+        this.Client = new require('mongodb').MongoClient;
     }
 
-    addTreat(Candy) {
+    async addTreat(Candy) {
         // add the treat to the database
-        this.MongoClient.connect(url, function(err, db) { // --> returns error object
-            if(err != null) {
-                console.log("error");
-                return null;
-            }
-            var dbo = client.db("Project0");
-            var result = await dbo.collection("Candies").insertOne(Candy);
+        var client = this.Client;
+        var url = this.url;
 
-            if(!result.acknowledged) return null;
-            return result.insertedId;
+        return new Promise(function(resolve, reject) {
+            client.connect(url, function(err, db) { // --> returns the collection of candies
+                if(err != null) {
+                    console.log("Error occured while connecting to client");
+                    reject(err);
+                };
+
+                var dbo = db.db("Candies");
+                dbo.collection("Candies").insertOne(Candy, function(err2, res) {
+                    if (err2) reject(err2);
+                    //console.log(res);
+                    resolve(res.insertedId);
+                });
+            });
         });
     }
 
-    fetchAllTreats() {
+    async fetchAllTreats() {
         // fetch all the treats from the database
-        this.MongoClient.connect(url, function(err, db) { // --> returns the collection of candies
-            if(err != null) return {};
+        var client = this.Client;
+        var url = this.url;
 
-            var dbo = client.db("Project0");
-            var allCandies = dbo.collection("Candies").find({}).toArray();
-
-            return allCandies;
+        return new Promise(function(resolve, reject) {
+            client.connect(url, function(err, db) { // --> returns the collection of candies
+                if(err != null) {
+                    console.log("Error occured while connecting to client");
+                    reject(err);
+                };
+    
+                var dbo = db.db("Candies");
+                dbo.collection("Candies").find({}, function(err, res){
+                    if(err != null) reject(err);
+                    resolve(res.toArray());
+                });
+            });
         });
     }
 
-    fetchByLocation(location) {
-        // fetch treats by location
-        this.MongoClient.connect(url, function(err, db) { // --> returns the collection of candies
-            if(err != null) return {};
+    async fetchByLocation(location) {
+        var client = this.Client;
+        var url = this.url;
 
-            var dbo = client.db("Project0");
-            var candiesByLoc = dbo.collection("Candies").find({"city": location}).toArray();
+        return new Promise(function(resolve, reject) {
+            client.connect(url, function(err, db) { // --> returns the collection of candies
+                if(err != null) {
+                    console.log("Error occured while connecting to client");
+                    reject(err);
+                };
 
-            return candiesByLoc;
+                var dbo = db.db("Candies");
+                dbo.collection("Candies").find({"city": location}, function(err, res){
+                    if(err != null) reject(err);
+                    resolve(res.toArray());
+                });
+            });
         });
     }
 }
+
+module.exports = Database;

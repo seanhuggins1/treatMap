@@ -3,40 +3,42 @@ module.exports = function(app, db) {
         'Content-Type': 'application/json; charset=UTF-8'
     }
     
-    // simple get request to verify that it's working
     app.get('/', (req, res) => {
         res.status(200).send("It's working!");
     });
 
-    app.post('/Candy', (req, res) => {
+    app.post('/Candy', async(req, res) => {
         candy = req.body;
-        var id = db.addTreat(candy);
-        res.set(headers);
+        
+        var id = await db.addTreat(candy);   
+        console.log(id);
         if (id == null) {
-            res.json(400).json({"Message ": "There was an error!"});
+            res.status(400).json({"Message ": "There was an error!"});
+            return;
         }
-        res.status(201).json({"ID: ${id}": "Added to DB", "Candy": Candy});
+        res.status(201).json({"ID": id, "Candy": candy});
     });
 
-    // add the candy to the DB
-    // return some kind of ID to the client
-    app.get('/Candies', (req, res) => {
-        var treats = db.fetchAllTreats();
+    app.get('/Candies', async(req, res) => {
+        var treats = await db.fetchAllTreats();
         res.set(headers);
 
         if (treats == null) {
-            res.json(500).json({"Message ": "There was an error!"});
+            res.status(500).json({"Message ": "There was an error!"});
+            return;
         }
         res.status(200).json({"Treats " : treats});
     });
 
-    app.get('/Candies/:Location', (req, res) => {
-        var Location = req.param('Location');
-        var treats = db.fetchByLocation(Location);
+    app.get('/Candies/:Location', async(req, res) => {
+        var Location = req.params.Location;
+        //console.log(`Location: ${Location}`);
+        var treats = await db.fetchByLocation(Location);
         res.set(headers);
 
         if (treats == null) {
-            res.json(400).json({"Message ": "There was an error!"});
+            res.status(500).json({"Message ": "There was an error!"});
+            return;
         }
         res.status(200).json({"Treats " : treats});
     });
