@@ -1,4 +1,5 @@
-import {initMap, addTreatToMap} from './map.js'
+import { flyToCenter, addTreatToMap, filterTreatFeatures } from './map.js'
+import { treatDietTags, treatTypeTags } from './tags.js';
 
 var activeQuestion = 0;
 
@@ -7,11 +8,21 @@ export let treatData = {};
 
 window.nextQuestion = nextQuestion;
 
+function toggleFilterTags() {
+      filterTags.classList.toggle('shown');
+      if (filterButton.innerHTML == 'filter treats'){
+            filterButton.innerHTML = 'hide'; 
+      } else {
+            filterButton.innerHTML = 'filter treats'
+      }
+      
+}
+
+window.toggleFilterTags = toggleFilterTags;
 
 function refreshQuestions() {
       let questions = questionContainer.getElementsByClassName("question");
       for (let q = 0; q < questions.length; q++) {
-            console.log(q);
             if (q == activeQuestion) {
                   questions[q].style.display = '';
                   questions[q].style.opacity = '1.0';
@@ -27,7 +38,7 @@ export function nextQuestion() {
       questions[activeQuestion].style.opacity = '0.0';
       setTimeout(function () {
             questions[activeQuestion].style.display = 'none';
-            if (activeQuestion == questions.length - 1){
+            if (activeQuestion == questions.length - 1) {
                   showMap(treatData.center);
             } else {
                   activeQuestion++;
@@ -37,66 +48,88 @@ export function nextQuestion() {
       }, 200);
 }
 
-async function addTreat(treatData){
+async function addTreat(treatData) {
       addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
-      
-      //FETCH to our DB
-      let url = new URL('/addTreat');
-      console.log(`url: ${url}`);
-      let response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-             'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify(treatData) // We send data in JSON format
-      });
-      
+
+      // let url = new URL('/addTreat');
+      // let response = await fetch(url, {
+      //       method: 'PUT',
+      //       headers: {
+      //        'Content-type': 'application/json; charset=UTF-8'
+      //       },
+      //       body: JSON.stringify(treatData) // We send data in JSON format
+      // });
 }
 
-function showMap(center = [0,0]) {
+function showMap(center = [0, 0]) {
       activeQuestion = null;
 
       //hide the question container
-      questionContainer.style.display = 'none';
+      questionContainer.style.opacity = '0.0';
 
       //show the map container
       mapContainer.style.display = 'flex';
-
-      //add the treat data to the map
       addTreat(treatData);
+      setTimeout(() => {
+            questionContainer.style.display = 'none';
 
 
-      initMap(center);
+
+            //add the treat data to the map
+
+            flyToCenter(center);
+      }, 400);
+
 }
+
+
+questionContainer.style.display = 'flex';
 mapContainer.style.display = 'none';
 refreshQuestions();
 
 
-function handleTagClick(event){
+function handleTagClick(event) {
       let tagElem = event.target.closest('.tag-button');
       tagElem.classList.toggle('selected');
 
 }
+function handleMapTagClick(event) {
+      let tagElem = event.target.closest('.tag-button');
+      tagElem.classList.toggle('selected');
 
-function handleSubmitTypeTags(event){
+      //update the map with the new filters
+      let typeTags = [];
+      for(let typeFilterTagElem of typeFilterTags.getElementsByClassName('selected')){
+            typeTags.push(typeFilterTagElem.innerHTML);
+      }
+      let dietTags = [];
+      for(let dietFilterTagElem of dietFilterTags.getElementsByClassName('selected')){
+            dietTags.push(dietFilterTagElem.innerHTML);
+      }
+
+      filterTreatFeatures(
+            typeTags,
+            dietTags
+            );
+}
+
+function handleSubmitTypeTags(event) {
       let typeTagElems = typeTags.getElementsByClassName('selected');
       treatData.treatTypeTags = [];
-      for (let typeTagElem of typeTagElems){
+      for (let typeTagElem of typeTagElems) {
             let tagName = typeTagElem.innerHTML;
             treatData.treatTypeTags.push(tagName);
       }
-      console.log(treatData);
       nextQuestion();
 }
 
-function handleSubmitDietTags(event){
+function handleSubmitDietTags(event) {
       let dietTagElems = dietTags.getElementsByClassName('selected');
       treatData.treatDietTags = [];
-      for (let dietTagElem of dietTagElems){
+      for (let dietTagElem of dietTagElems) {
             let tagName = dietTagElem.innerHTML;
             treatData.treatDietTags.push(tagName);
       }
-      console.log(treatData);
       nextQuestion();
 }
 
@@ -104,34 +137,36 @@ function handleSubmitDietTags(event){
 submitTypeTags.addEventListener('click', handleSubmitTypeTags);
 submitDietTags.addEventListener('click', handleSubmitDietTags);
 
-let tags = [
-      'Peanuts',
-      'Tree Nuts',
-      'Dairy',
-      'Eggs',
-      'Wheat',
-      'Soy',
-]
-let treatTypeTags = [
-      'Chips',
-      'Candy',
-      'Chocolate',
-      'KitKat',
-      'Caramilk',
-]
-for (let tag of treatTypeTags){
+
+for (let tag of treatTypeTags) {
+      //create a tag element for the questionnaire
       let tagElem = document.createElement('div');
-      tagElem.classList.add('button','tag-button');
+      tagElem.classList.add('button', 'tag-button','typeTag');
       tagElem.innerHTML = tag;
       tagElem.addEventListener('click', handleTagClick);
       typeTags.append(tagElem);
+
+      //create a tag element for the map filters
+      tagElem = document.createElement('div');
+      tagElem.classList.add('button', 'tag-button','typeTag');
+      tagElem.innerHTML = tag;
+      tagElem.addEventListener('click', handleMapTagClick);
+      typeFilterTags.append(tagElem);
 }
-for (let tag of tags){
+for (let tag of treatDietTags) {
+      //create a tag element for the questionnaire
       let tagElem = document.createElement('div');
-      tagElem.classList.add('button','tag-button');
+      tagElem.classList.add('button', 'tag-button','dietTag');
       tagElem.innerHTML = tag;
       tagElem.addEventListener('click', handleTagClick);
       dietTags.append(tagElem);
+
+      //create a tag element for the map filters
+      tagElem = document.createElement('div');
+      tagElem.classList.add('button', 'tag-button', 'dietTag');
+      tagElem.innerHTML = tag;
+      tagElem.addEventListener('click', handleMapTagClick);
+      dietFilterTags.append(tagElem);
 }
 
 
