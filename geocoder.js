@@ -9,4 +9,5 @@ geocoder.addTo('#geocoder');
 
 geocoder.on('result', function(result) {
       console.log(result);
+      console.log('hello');
 });
