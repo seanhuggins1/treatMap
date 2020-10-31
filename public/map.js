@@ -1,3 +1,5 @@
+
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2h1Z2dpbnMiLCJhIjoiY2tnd24xbW5jMGJsczJxbG5yMGEzazQ5aiJ9.FxooIHh6YNpvjBtY7Im8PQ';
 
 
@@ -97,7 +99,7 @@ function initMap(center = [0, 0]) {
 
 
             map.loadImage(
-                  'https://uxwing.com/wp-content/themes/uxwing/download/23-animals-and-nature/halloween.png',
+                  'pumpkin.png',
                   function (error, image) {
                         if (error) throw error;
                         map.addImage('cat', image);
@@ -114,7 +116,7 @@ function initMap(center = [0, 0]) {
                               'source': 'point',
                               'layout': {
                                     'icon-image': 'cat',
-                                    'icon-size': 0.1
+                                    'icon-size': 0.5
                               }
                         });
                   }
@@ -124,6 +126,7 @@ function initMap(center = [0, 0]) {
 }
 
 
+export {initMap};
 
 
 
