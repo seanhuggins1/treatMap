@@ -21,6 +21,7 @@ var socket = require('./WebSocket/socket');
 var wss = new socket(app);
 
 
+
 function open_file_and_load(address) {
    var fs = require('fs');
    vals = fs.readFileSync(address, 'utf-8');
@@ -33,7 +34,6 @@ function open_file_and_load(address) {
 combined = open_file_and_load('../analytics/combined_data.json');
 
 require('./routes')(app, db, wss, combined);
-
 
 var port = process.env.PORT || 8888;
 app.listen(port);
