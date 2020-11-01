@@ -5,7 +5,7 @@ Created for MLH HackOrTreat2020, 2nd place winner.
 
 # Setup and Installation
 
-We built Safetreats using HTML, CSS, JavaScript,  NodeJS Express, Python, Pandas,Mapbox API, MongoDB, Google Cloud, Web Sockets (ws).
+We built Safetreats using HTML, CSS, JavaScript,  NodeJS Express, Python, Pandas, Mapbox API, MongoDB, Google Cloud, Web Sockets (ws).
 
 Here's how to get started:
 
@@ -25,3 +25,5 @@ Here's how to get started:
 3. Change the date info
 4. Run python pandas_read.py from/analytics
 ```
+# Forking this Repository
+Feel free to fork this repository and add your own unique contributions to this app!
