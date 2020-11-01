@@ -1,4 +1,4 @@
-module.exports = function(app, db) {
+module.exports = function(app, db, wss) {
     var headers = {
         'Content-Type': 'application/json; charset=UTF-8'
     }
@@ -8,12 +8,16 @@ module.exports = function(app, db) {
             candy = req.body;
             
             var id = await db.addTreat(candy);   
-            console.log(id);
+            //console.log(id);
             if (id == null) {
                 res.status(500).json({"Message ": "There was an error!"});
                 return;
             }
             res.status(201).json({"ID": id, "Candy": candy});
+
+
+            //let the websocket clients know about the new treat
+            wss.broadcast(JSON.stringify({"ID": id, "Candy": candy}, null, 2));
         }
         catch(error) {
             res.status(500).json({"error": error});
