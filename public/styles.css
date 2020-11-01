@@ -19,19 +19,49 @@ body {
       z-index: 1000;
 }
 #mapContainer {
-      height: 100%;
-      width: 100%;
-}
-#map {
       height: 100vh;
       width: 100vw;
 }
+#map canvas {
+      outline: none;
+}
+#map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100vw;
+}
 
+header{
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #fde7d6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      padding: 0.3vw;
+}
+p {
+      margin: 0;
+      padding: 0;
+
+}
+h3 {
+      font-size: 1.2vw;
+      font-weight: 400;
+      padding: 0;
+      margin: 0;
+      color: #352c26;
+}
 h2 {
       font-size: 1.5vw;
       font-weight: 600;
       margin: 0.3vw;
       padding: 0;
+      color: #352c26;
 }
 h1 {
       color: white;
@@ -154,7 +184,6 @@ h1 {
 }
 
 #questionContainer {
-      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -170,14 +199,24 @@ h1 {
       background-color: #FFE3CF;
       transition: .4s opacity ease-in-out;
 }
+
+.icon {
+      width: 20vw;
+      height: 20vw;
+}
 #questionContainer > .question {
+      display: none;
+      opacity: 0.0;
+
       width: 50%;
+      height: fit-content;
+      padding: 1vw;
       text-align: center;
-      display: flex;
+
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: .4s opacity ease-in-out;
+      transition: .25s opacity ease-in-out;
 }
 
 #geocoder {

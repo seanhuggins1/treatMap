@@ -2,12 +2,12 @@ import { flyToCenter, addTreatToMap, filterTreatFeatures } from './map.js'
 import { treatDietTags, treatTypeTags } from './tags.js';
 import { getLocation } from './geocoder.js';
 
-var activeQuestion = 0;
+
 
 //create a form data object to store the info about the treat provider
 export let treatData = {};
 
-window.nextQuestion = nextQuestion;
+window.goToQuestion = goToQuestion;
 
 function toggleFilterTags() {
       filterTags.classList.toggle('shown');
@@ -21,32 +21,32 @@ function toggleFilterTags() {
 
 window.toggleFilterTags = toggleFilterTags;
 
-function refreshQuestions() {
+let activeQuestion = 0;
+function initQuestions(){
       let questions = questionContainer.getElementsByClassName("question");
-      for (let q = 0; q < questions.length; q++) {
-            if (q == activeQuestion) {
-                  questions[q].style.display = '';
-                  questions[q].style.opacity = '1.0';
-            } else {
-                  questions[q].style.display = 'none';
-                  questions[q].style.opacity = '0.0';
-            }
-      }
+      questions[activeQuestion].style.display = 'flex';
+      setTimeout(function (){
+            questions[activeQuestion].style.opacity = '1.0';
+      }, 250);
 }
+initQuestions();
 
-export function nextQuestion() {
+export function goToQuestion(questionNumber) {
       let questions = questionContainer.getElementsByClassName("question");
       questions[activeQuestion].style.opacity = '0.0';
       setTimeout(function () {
             questions[activeQuestion].style.display = 'none';
-            if (activeQuestion == questions.length - 1) {
-                  showMap(treatData.center);
-            } else {
-                  activeQuestion++;
-                  questions[activeQuestion].style.display = '';
-                  questions[activeQuestion].style.opacity = '1.0';
+            activeQuestion = questionNumber;
+            if (activeQuestion == 6 || activeQuestion == 2) {
+                  setTimeout(() => {showMap(treatData.center)}, 2000);
             }
-      }, 200);
+            questions[activeQuestion].style.display = 'flex';
+            setTimeout(function (){
+                  questions[activeQuestion].style.opacity = '1.0';
+            }, 250);
+            
+            
+      }, 250);
 }
 
 
@@ -97,7 +97,7 @@ function showMap(center = [0, 0]) {
 
       //show the map container
       mapContainer.style.display = 'flex';
-      addTreat(treatData);
+      
       setTimeout(() => {
             questionContainer.style.display = 'none';
 
@@ -114,7 +114,7 @@ function showMap(center = [0, 0]) {
 questionContainer.style.display = 'flex';
 mapContainer.style.display = 'none';
 treatInfo.style.display = 'none';
-refreshQuestions();
+//refreshQuestions();
 
 
 function handleTagClick(event) {
@@ -149,7 +149,8 @@ function handleSubmitTypeTags(event) {
             let tagName = typeTagElem.innerHTML;
             treatData.treatTypeTags.push(tagName);
       }
-      nextQuestion();
+      goToQuestion(6);
+      addTreat(treatData);
 }
 
 function handleSubmitDietTags(event) {
@@ -159,7 +160,7 @@ function handleSubmitDietTags(event) {
             let tagName = dietTagElem.innerHTML;
             treatData.treatDietTags.push(tagName);
       }
-      nextQuestion();
+      goToQuestion(5);
 }
 
 

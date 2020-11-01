@@ -33,7 +33,6 @@ function generateDummyTreatFeatures(numFeatures) {
 
             let colors = ["green", "yellow","orange","red"];
             let colorChoice = colors[Math.floor(Math.random()*(colors.length))];
-            console.log(colorChoice);
 
             let feature = createFeature(generateRandomCoordinates(), typeChoices, dietChoices, colorChoice);
             treatFeatures.push(feature);
@@ -202,7 +201,6 @@ export async function flyToCenter(center) {
 }
 
 
-
 map.on("load", function () {
       map.loadImage(
             'pumpkin.png',
@@ -248,7 +246,7 @@ map.on('click', 'treats-layer', function (e) {
 });
 
 // Change the cursor to a pointer when the mouse is over the places layer.
-map.on('mouseenter', 'treats-layer', function () {
+map.on('mouseenter', 'treats-layer', function (e) {
       map.getCanvas().style.cursor = 'pointer';
 });
 
