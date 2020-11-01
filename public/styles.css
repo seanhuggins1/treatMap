@@ -46,8 +46,14 @@ h1 {
       flex-direction: row;
       flex-wrap: wrap;
       align-items: flex-start;
-      justify-content: flex-start;
+      justify-content: center;
       width: fit-content;
+}
+#treatInfo {
+      position: absolute;
+      width: fit-content;
+      background-color: white;
+      border-radius: 0.7vw;
 }
 .button {
       background-color: white;
@@ -85,6 +91,45 @@ h1 {
 .typeTag.selected {
       background-color: #e4ffdf;
 }
+.mapboxgl-popup {
+      max-width: 20vw !important;
+      width: 20vw !important;
+}
+.mapboxgl-popup-close-button{
+      outline: none;
+}
+.mapboxgl-popup-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1vw !important;
+      border-radius: 0.7vw;
+}
+.tag{
+      letter-spacing: 0px !important;
+      color: #352c26 !important;
+      border-radius: 0.3vw;
+      font-family: 'Montserrat' !important;
+      font-size: 1.2vw !important;
+      margin: 0.3vw !important;
+      padding: 0.3vw !important;
+      width: fit-content;
+}
+.tag-large{
+      letter-spacing: 0px !important;
+      border-radius: 0.3vw;
+      font-size: 1.5vw !important;
+      font-weight: 600 !important;
+      padding: 0.7vw !important;
+}
+.tag.dietTag{
+      background-color: #ffdfdf;
+}
+.tag.typeTag{
+      background-color: #e4ffdf;
+}
+
 
 #tagDrawer {
       position: fixed;
