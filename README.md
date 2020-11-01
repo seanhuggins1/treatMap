@@ -20,7 +20,7 @@ Here's how to get started:
 ## Analytics
 
 ```bash
-1. Download the Covid Cases data from [Microsoft Bing]: (https://www.bing.com/covid/local/canada
+1. Download the Covid Cases data from Microsoft Bing: (https://www.bing.com/covid/local/canada
 2. Change the location under /analytics/pandas_read.py to where this dataset is stored
 3. Change the date info
 4. Run python pandas_read.py from/analytics
