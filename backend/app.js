@@ -15,6 +15,7 @@ var database = require('./Database/database');
 var db = new database(`mongodb+srv://dbUser:${process.env.env_pwd}@cluster0.c7ut5.mongodb.net/admin?retryWrites=true&w=majority`);
 // console.log(db); // test
 
+
 //secure web socket
 var socket = require('./WebSocket/socket');
 var wss = new socket(app);
@@ -23,6 +24,20 @@ var wss = new socket(app);
 //       wss.broadcast('hello');
 // },1000);
 require('./routes')(app, db, wss);
+
+function open_file_and_load(address) {
+   var fs = require('fs');
+   vals = fs.readFileSync(address, 'utf-8');
+   parsed = JSON.parse(vals);
+   return parsed;
+}
+
+// county = open_file_and_load('../analytics/County.json');
+// state = open_file_and_load('../analytics/State.json');
+combined = open_file_and_load('../analytics/combined_data.json');
+
+require('./routes')(app, db, wss, combined);
+
 
 var port = process.env.PORT || 8888;
 app.listen(port);
