@@ -93,6 +93,8 @@ module.exports = function(app, db, wss, combinedData) {
         var State = req.params.State;
         var County = req.params.County;
 
+        
+
         if(County in combinedData) {
             res.status(200).json({"safety": combinedData[County]});
             return;

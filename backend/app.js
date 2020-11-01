@@ -23,7 +23,6 @@ var wss = new socket(app);
 // setInterval(()=> {
 //       wss.broadcast('hello');
 // },1000);
-require('./routes')(app, db, wss);
 
 function open_file_and_load(address) {
    var fs = require('fs');
@@ -37,7 +36,6 @@ function open_file_and_load(address) {
 combined = open_file_and_load('../analytics/combined_data.json');
 
 require('./routes')(app, db, wss, combined);
-
 
 var port = process.env.PORT || 8888;
 app.listen(port);
