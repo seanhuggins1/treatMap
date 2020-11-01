@@ -20,10 +20,6 @@ var db = new database(`mongodb+srv://dbUser:${process.env.env_pwd}@cluster0.c7ut
 var socket = require('./WebSocket/socket');
 var wss = new socket(app);
 
-// setInterval(()=> {
-//       wss.broadcast('hello');
-// },1000);
-require('./routes')(app, db, wss);
 
 function open_file_and_load(address) {
    var fs = require('fs');

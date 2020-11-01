@@ -1,5 +1,6 @@
 import { flyToCenter, addTreatToMap, filterTreatFeatures } from './map.js'
 import { treatDietTags, treatTypeTags } from './tags.js';
+import { getLocation } from './geocoder.js';
 
 var activeQuestion = 0;
 
@@ -48,11 +49,38 @@ export function nextQuestion() {
       }, 200);
 }
 
+
 async function addTreat(treatData) {
       addTreatToMap(treatData);     //TODO can get rid of this when we pull all treats from db
 
+      let locationJson = await getLocation(treatData.center);
+      let locationData = {
+            county: 'None',
+            state: 'None',
+            country: 'None',
+      };
+      for (let feature of locationJson.features){
+            switch(feature.place_type[0]){
+                  case 'place':
+                        locationData.county = feature.text;
+                        break;
+                  case 'region':
+                        locationData.state = feature.text;
+                        break;
+                  case 'country':
+                        locationData.country = feature.text;
+                        break;
+                  default:
+            }
+      }
+      
 
-      let response = await fetch('/Candy', {
+      let response = await fetch(`/Safety/${locationData.country}/${locationData.state}/${locationData.county}`);
+      let json = await response.json();
+
+      treatData.safetyRating = json.safety;
+
+      response = await fetch('/Candy', {
             method: 'POST',
             headers: {
              'Content-type': 'application/json; charset=UTF-8'
