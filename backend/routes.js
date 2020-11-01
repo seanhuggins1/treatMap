@@ -1,4 +1,4 @@
-module.exports = function(app, db) {
+module.exports = function(app, db, combinedData) {
     var headers = {
         'Content-Type': 'application/json; charset=UTF-8'
     }
@@ -81,5 +81,23 @@ module.exports = function(app, db) {
         catch(error) {
             res.status(500).json({"error": error});
         }
+    });
+
+    app.get('/Safety/:Country/:State/:County', (req, res) => {
+        var Country = req.params.Country;
+        var State = req.params.State;
+        var County = req.params.County;
+
+        if(County in combinedData) {
+            res.status(200).json({"safety": combinedData[County]});
+            return;
+        }
+
+        if(State in combinedData) {
+            res.status(200).json({"safety": combinedData[State]});
+            return;
+        }
+        
+        res.status(200).json({"safety": combinedData[Country]});
     });
 }
