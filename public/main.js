@@ -113,6 +113,7 @@ function showMap(center = [0, 0]) {
 
 questionContainer.style.display = 'flex';
 mapContainer.style.display = 'none';
+treatInfo.style.display = 'none';
 refreshQuestions();
 
 

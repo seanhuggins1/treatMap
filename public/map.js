@@ -31,26 +31,56 @@ function generateDummyTreatFeatures(numFeatures) {
                   if (dietChoices.indexOf(dietChoice) === -1) dietChoices.push(dietChoice);
             }
 
+            let colors = ["green", "yellow","orange","red"];
+            let colorChoice = colors[Math.floor(Math.random()*(colors.length))];
+            console.log(colorChoice);
 
-
-            let feature = {
-                  'type': 'Feature',
-                  'geometry': {
-                        'type': 'Point',
-                        'coordinates': generateRandomCoordinates()
-                  },
-                  'properties': {
-                        'treatTypeTags': typeChoices,
-                        'treatDietTags': dietChoices,
-                  }
-            }
+            let feature = createFeature(generateRandomCoordinates(), typeChoices, dietChoices, colorChoice);
             treatFeatures.push(feature);
       }
 }
-//generateDummyTreatFeatures(100);
+generateDummyTreatFeatures(100);
+
+function createFeature(coordinates, typeTags, dietTags, safetyRating) {
+
+      let description = `
+      <div class="tag tag-large" style="background-color: ${safetyRating}">
+      
+            covid rating
+      
+      </div>
+      
+      
+      <div class="buttonBox">
+      `;
+
+      for (let tag of typeTags) {
+            let elemString = `<div class="tag typeTag">${tag}</div>`;
+            description += elemString;
+      }
+      for (let tag of dietTags) {
+            let elemString = `<div class="tag dietTag">${tag}</div>`;
+            description += elemString;
+      }
+
+      description += '</div>';
 
 
-async function generateTreatFeaturesFromDB(){
+      let feature = {
+            'type': 'Feature',
+            'geometry': {
+                  'type': 'Point',
+                  'coordinates': coordinates,
+            },
+            'properties': {
+                  'treatTypeTags': typeTags,
+                  'treatDietTags': dietTags,
+                  'description': description,
+            }
+      }
+      return feature;
+}
+async function generateTreatFeaturesFromDB() {
       let response = await fetch('/Candies', {
             method: 'GET',
       });
@@ -58,26 +88,15 @@ async function generateTreatFeaturesFromDB(){
 
       //parse the treat features
       let treats = json["Treats "];
-      for (let treatData of treats){
-            let treatFeature = {
-                  'type': 'Feature',
-                  'geometry': {
-                        'type': 'Point',
-                        'coordinates': treatData.center,
-      
-                  },
-                  'properties': {
-                        'treatTypeTags': treatData.treatTypeTags,
-                        'treatDietTags': treatData.treatDietTags,
-                  }
-            }
-            treatFeatures.push(treatFeature);
+      for (let treatData of treats) {
+            let feature = createFeature(treatData.center, treatData.treatTypeTags, treatData.treatDietTags);
+            treatFeatures.push(feature);
       }
 
 
-      
+
 }
-generateTreatFeaturesFromDB();
+//generateTreatFeaturesFromDB();
 
 function updateTreatFeatures(features) {
       let dataGeoJson = {
@@ -92,21 +111,8 @@ function updateTreatFeatures(features) {
 
 
 export function addTreatToMap(treatData) {
-      let newTreat = {
-            'type': 'Feature',
-            'geometry': {
-                  'type': 'Point',
-                  'coordinates': treatData.center,
-
-            },
-            'properties': {
-                  'treatTypeTags': treatData.treatTypeTags,
-                  'treatDietTags': treatData.treatDietTags,
-            }
-      }
-
-      treatFeatures.push(newTreat);
-
+      let feature = createFeature(treatData.center, treatData.treatTypeTags, treatData.treatDietTags);
+      treatFeatures.push(feature);
       updateTreatFeatures(treatFeatures);
 }
 
@@ -222,18 +228,34 @@ map.on("load", function () {
             }
       );
 });
-//
-// function handleTreatClick(e) {
-//       let features = map.queryRenderedFeatures(
-//             e.point,
-//             { layers: ['treats-layer'] }
-//       );
-//       console.log(JSON.stringify(features[0]));
-// }
-
-// map.on('click', handleTreatClick(e));
 
 
+map.on('click', 'treats-layer', function (e) {
+      var coordinates = e.features[0].geometry.coordinates.slice();
+      var description = e.features[0].properties.description;
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+});
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'treats-layer', function () {
+      map.getCanvas().style.cursor = 'pointer';
+});
+
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'treats-layer', function () {
+      map.getCanvas().style.cursor = '';
+});
 
 //getLocation();
 
