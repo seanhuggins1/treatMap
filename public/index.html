@@ -52,18 +52,31 @@
 
       <!-- QUESTIONS -->
       <div id="questionContainer">
+            <header>
+                  <h3>©2020 safetreats</h3>
+            </header>
             <div class="question">
-                  <h1>this halloween...are you:</h1>
+                  <img class="icon" src="jack-o-lantern.svg">
+                  <h1>this halloween...are you</h1>
                   <div class="buttonBox">
-                        <div class="button big-button" onclick="nextQuestion()">handing out treats</div>
-                        <div class="button big-button">trick or treating</div>
+                        <div class="button big-button" onclick="goToQuestion(3)">handing out treats</div>
+                        <div class="button big-button" onclick="goToQuestion(1)">trick or treating</div>
                   </div>
             </div>
             <div class="question">
-                  <h1>where are you giving out your treats?</h1>
-                  <div id="geocoder"></div>
+                  <h1>where are you trick-or-treating?</h1>
+                  <div id="geocoder-1"></div>
             </div>
             <div class="question">
+                  <h1>taking you there...</h1>
+            </div>
+            <div class="question">
+
+                  <h1>where are you giving out your treats?</h1>
+                  <div id="geocoder-2"></div>
+            </div>
+            <div class="question">
+                  <img class="icon" src="cauldron.svg">
                   <h1>do your treats contain any common allergens?</h1>
                   <div id="dietTags" class="buttonBox"></div>
                   <div class="buttonBox">
@@ -71,11 +84,15 @@
                   </div>
             </div>
             <div class="question">
+                  <img class="icon" src="candy-bag.svg">
                   <h1>what type of treats are you giving out?</h1>
                   <div id="typeTags" class="buttonBox"></div>
                   <div class="buttonBox">
                         <div id="submitTypeTags" class="button submit-button">OK</div>
                   </div>
+            </div>
+            <div class="question">
+                  <h1>adding your treats...</h1>
             </div>
       </div>
       
