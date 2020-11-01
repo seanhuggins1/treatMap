@@ -1,6 +1,8 @@
 //setup a websocket
+import {addTreatToMap} from './map.js';
 
-let url = new URL('wss://localhost:8888')
+
+let url = new URL('ws://localhost:8080')
 
 let socket = new WebSocket(url);
 
@@ -14,13 +16,17 @@ export function send(text){
 socket.onopen = function (e) {
       console.log("[open] Connection established");
       console.log("Sending to server");
-      socket.send("My name is John");
+      socket.send("I'm a new client");
 }
 
 //data is recieved from the server
 socket.onmessage = function (event) {
       console.log(`[message] Data received from server: ${event.data}`);
+      console.log(JSON.parse(event.data));
+      addTreatToMap(JSON.parse(event.data)["Candy"]);
 }
+
+
 
 //conection is closed
 socket.onclose = function (event) {
@@ -31,6 +37,7 @@ socket.onclose = function (event) {
             // event.code is usually 1006 in this case
             alert('[close] Connection died');
       }
+
 };
 
 //websocket error
